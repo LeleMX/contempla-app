@@ -1,0 +1,79 @@
+<div class="navbar bg-base-200 shadow-md sticky top-0 z-50">
+  <div class="navbar-start">
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-ghost md:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+        </svg>
+      </div>
+      <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow border border-base-300">
+        <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a></li>
+        <li><a routerLink="/clientes" routerLinkActive="active">Clientes</a></li>
+        <li><a routerLink="/menu-admin" routerLinkActive="active">Administrar Menú</a></li>
+        <li><a routerLink="/landing-admin" routerLinkActive="active">Sitio Web</a></li>
+        <li><a routerLink="/registro" target="_blank">QR Check-in</a></li>
+      </ul>
+    </div>
+    <a routerLink="/home" class="btn btn-ghost text-xl font-cursive text-primary hidden sm:flex gap-2 items-center">
+      <div class="avatar">
+        <div class="w-8 h-8 rounded-full border border-primary/30">
+          <img src="logo.jpg" alt="Contempla Logo" />
+        </div>
+      </div>
+      Contempla
+    </a>
+  </div>
+  
+  <div class="navbar-center hidden md:flex">
+    <ul class="menu menu-horizontal px-1 gap-2 font-medium">
+      <li><a routerLink="/home" routerLinkActive="bg-base-300 text-primary font-bold" [routerLinkActiveOptions]="{exact: true}" class="rounded-xl">Inicio</a></li>
+      <li><a routerLink="/clientes" routerLinkActive="bg-base-300 text-primary font-bold" class="rounded-xl">Clientes</a></li>
+      <li><a routerLink="/menu-admin" routerLinkActive="bg-base-300 text-primary font-bold" class="rounded-xl">Menú</a></li>
+      <li><a routerLink="/landing-admin" routerLinkActive="bg-base-300 text-primary font-bold" class="rounded-xl">Sitio Web</a></li>
+      <li><a routerLink="/registro" target="_blank" class="rounded-xl hover:text-primary">QR Check-in</a></li>
+    </ul>
+  </div>
+  
+  <div class="navbar-end gap-2">
+    <!-- Theme Controller (DaisyUI Swap) -->
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-sm sm:btn-md gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+        <span class="hidden sm:inline">Tema</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content bg-base-200 text-base-content rounded-box z-[1] w-52 p-2 shadow-2xl mt-4 border border-base-300 space-y-1">
+        @for (theme of themes; track theme.value) {
+          <li>
+            <button class="btn btn-sm btn-block justify-between" 
+                    [class.btn-primary]="currentTheme === theme.value" 
+                    [class.btn-ghost]="currentTheme !== theme.value" 
+                    (click)="changeTheme(theme.value)">
+              {{theme.label}}
+              @if (currentTheme === theme.value) {
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+
+    @if (authService.currentUser$ | async; as user) {
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost gap-2 pl-2">
+          <div class="avatar placeholder">
+            <div class="bg-neutral text-neutral-content rounded-full w-8">
+              <span class="text-xs">{{ user.username.substring(0, 2).toUpperCase() }}</span>
+            </div>
+          </div>
+          <span class="hidden sm:inline font-bold">{{ user.username }}</span>
+        </div>
+        <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-52 p-2 shadow border border-base-300">
+          <li><span class="text-sm opacity-50 block px-4 py-2 border-b border-base-200 mb-2">Conectado como {{ user.username }}</span></li>
+          <li><button class="text-error" (click)="logout()">Cerrar Sesión</button></li>
+        </ul>
+      </div>
+    }
+  </div>
+</div>

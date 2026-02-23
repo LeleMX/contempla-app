@@ -1,0 +1,129 @@
+<div class="min-h-screen bg-base-200 flex flex-col justify-center items-center p-4">
+  <div class="card w-full max-w-md bg-base-100 shadow-2xl border border-base-300 overflow-hidden">
+    <div class="bg-primary p-6 text-center text-primary-content">
+      <h1 class="font-cursive text-5xl mb-2 drop-shadow-sm">Contempla</h1>
+      <p class="font-medium opacity-90">Registra tu visita de hoy</p>
+    </div>
+    
+    <div class="card-body p-8">
+      @if (successMessage) {
+        @if (isRewardEligible) {
+            <div class="alert alert-success bg-success/20 border-success text-success-content flex-col gap-4 animate-scale-in">
+              <div class="text-6xl animate-bounce">🎁</div>
+              <h2 class="text-2xl font-bold">¡Felicidades!</h2>
+              <p class="text-center">
+                Has alcanzado tu <strong>10ma visita</strong>. ¡Te has ganado un <span class="font-bold text-xl">30% de descuento</span> en tu próxima compra!
+              </p>
+              <div class="bg-base-100/50 rounded-xl py-3 px-4 font-mono text-2xl tracking-widest font-bold mx-auto shadow-inner text-base-content">
+                CONTEMPLA30
+              </div>
+              <p class="text-sm opacity-70">Muestra esta pantalla en caja para validar tu descuento.</p>
+              
+              @if (isAdmin) {
+                <p class="text-sm mt-2 opacity-50">Redirigiendo a inicio...</p>
+              } @else {
+                <p class="text-sm mt-2 font-bold">Puedes cerrar esta ventana.</p>
+              }
+            </div>
+        } @else {
+            <div role="alert" class="alert alert-success animate-fade-in-up">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <div>
+                <h3 class="font-bold">{{ successMessage }}</h3>
+                @if (isAdmin) {
+                  <div class="text-xs opacity-70">Redirigiendo a inicio...</div>
+                } @else {
+                  <div class="text-xs">Puedes cerrar esta ventana.</div>
+                }
+              </div>
+            </div>
+        }
+      } @else {
+        <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4" novalidate>
+          <label class="form-control w-full">
+            <div class="label">
+              <span class="label-text font-bold">Nombre Completo</span>
+            </div>
+            <input 
+              type="text" 
+              id="name" 
+              name="name"
+              [(ngModel)]="name"
+              placeholder="Juan Pérez"
+              required
+              class="input input-bordered w-full focus:input-primary"
+            />
+          </label>
+
+          <label class="form-control w-full mt-2">
+            <div class="label">
+              <span class="label-text font-bold">Correo Electrónico</span>
+            </div>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              [(ngModel)]="email"
+              placeholder="tu@correo.com"
+              required
+              class="input input-bordered w-full focus:input-primary"
+            />
+          </label>
+
+          @if (errorMessage) {
+            <div role="alert" class="alert alert-error animate-fade-in-up">
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>{{ errorMessage }}</span>
+            </div>
+          }
+
+          <div class="form-control mt-4">
+            <button 
+              type="submit" 
+              [disabled]="isLoading || !email"
+              class="btn btn-primary btn-lg w-full">
+              @if (isLoading) {
+                <span class="loading loading-spinner"></span>
+                Registrando...
+              } @else {
+                Hacer Check-in
+              }
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+    .animate-scale-in {
+        animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .animate-fade-in-up {
+        animation: fadeInUp 0.4s ease-out forwards;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

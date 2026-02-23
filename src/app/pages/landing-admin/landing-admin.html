@@ -1,0 +1,141 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="flex items-center justify-between mb-8 animate-fade-in-up">
+        <div>
+            <h1 class="text-4xl font-bold mb-2">Editor de Landing Page</h1>
+            <p class="text-lg opacity-70">Personaliza los textos e imágenes de tu página principal en tiempo real</p>
+        </div>
+    </div>
+
+    @if (settings) {
+    <form (ngSubmit)="saveSettings()" class="space-y-12 animate-fade-in-up" novalidate>
+        
+        <!-- Bloque 1: Pantalla Principal (Hero) -->
+        <div class="card bg-base-100 shadow-xl border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-2xl border-b border-base-300 pb-4 mb-4">1. Bienvenida (Hero)</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text font-bold text-lg">Título Principal</span></div>
+                        <input type="text" [(ngModel)]="settings.heroTitle" name="heroTitle" required
+                               class="input input-bordered w-full focus:input-primary font-cursive text-2xl" placeholder="Ej. Contempla">
+                    </label>
+
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text font-bold text-lg">Subtítulo Corto</span></div>
+                        <input type="text" [(ngModel)]="settings.heroSubtitle" name="heroSubtitle" required
+                               class="input input-bordered w-full focus:input-primary" placeholder="Ej. El Arte del Café">
+                    </label>
+                </div>
+
+                <label class="form-control w-full mt-4">
+                    <div class="label"><span class="label-text font-bold">Fondo de Pantalla Principal (Hero)</span></div>
+                    <div class="flex flex-col md:flex-row gap-4 items-center">
+                        <div class="w-full md:w-2/3">
+                            <input type="file" (change)="onFileSelected($event, 'heroBg')" accept="image/*"
+                                class="file-input file-input-bordered w-full focus:file-input-primary" />
+                        </div>
+                        <div class="w-full md:w-1/3 flex justify-center">
+                            @if (settings.heroBgUrl) {
+                                <div class="avatar">
+                                    <div class="w-32 rounded-lg border-2 border-primary shadow-lg">
+                                        <img [src]="settings.heroBgUrl" alt="Fondo Hero">
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Bloque 2: Nuestra Esencia -->
+        <div class="card bg-base-100 shadow-xl border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-2xl border-b border-base-300 pb-4 mb-4">2. Nuestra Esencia</h2>
+                
+                <label class="form-control w-full mb-4">
+                    <div class="label"><span class="label-text font-bold text-lg">Encabezado de Sección</span></div>
+                    <input type="text" [(ngModel)]="settings.aboutTitle" name="aboutTitle" required
+                           class="input input-bordered w-full focus:input-primary max-w-md" placeholder="Ej. Nuestra Esencia">
+                </label>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text font-bold">Párrafo 1</span></div>
+                        <textarea [(ngModel)]="settings.aboutText1" name="aboutText1" rows="4" required
+                                  class="textarea textarea-bordered focus:textarea-primary text-base leading-relaxed"></textarea>
+                    </label>
+
+                    <label class="form-control w-full">
+                        <div class="label"><span class="label-text font-bold">Párrafo 2</span></div>
+                        <textarea [(ngModel)]="settings.aboutText2" name="aboutText2" rows="4" required
+                                  class="textarea textarea-bordered focus:textarea-primary text-base leading-relaxed"></textarea>
+                    </label>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <label class="form-control w-full border border-base-200 p-4 rounded-xl">
+                        <div class="label"><span class="label-text font-bold">Imagen de Acompañamiento</span></div>
+                        <input type="file" (change)="onFileSelected($event, 'aboutImage')" accept="image/*" class="file-input file-input-bordered file-input-sm w-full mb-4" />
+                        @if (settings.aboutImage1) { <img [src]="settings.aboutImage1" class="w-full h-32 object-cover rounded-md shadow"> }
+                    </label>
+
+                    <label class="form-control w-full border border-base-200 p-4 rounded-xl">
+                        <div class="label"><span class="label-text font-bold">Fondo de la Sección (Esencia)</span></div>
+                        <input type="file" (change)="onFileSelected($event, 'aboutBg')" accept="image/*" class="file-input file-input-bordered file-input-sm w-full mb-4" />
+                        @if (settings.aboutBgUrl) { <img [src]="settings.aboutBgUrl" class="w-full h-32 object-cover rounded-md shadow"> }
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bloque 3: Menú Público -->
+        <div class="card bg-base-100 shadow-xl border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title text-2xl border-b border-base-300 pb-4 mb-4">3. Visor de Menú Público</h2>
+                
+                <p class="opacity-80 mb-4">Esta es la imagen de fondo que aparece detrás de la lista de tus bebidas y platillos en la parte final de la Landing Page.</p>
+                <label class="form-control w-full max-w-lg">
+                    <div class="label"><span class="label-text font-bold">Imagen de Fondo para Menú</span></div>
+                    <input type="file" (change)="onFileSelected($event, 'menuBg')" accept="image/*" class="file-input file-input-bordered w-full mb-4" />
+                    @if (settings.menuBgUrl) { <img [src]="settings.menuBgUrl" class="w-full h-40 object-cover rounded-xl shadow border-2 border-base-200"> }
+                </label>
+            </div>
+        </div>
+
+        <!-- Sticky Footer de Guardado -->
+        <div class="sticky bottom-4 z-40 bg-base-200 p-4 rounded-2xl shadow-2xl border-t-4 border-primary mt-8 flex justify-between items-center animate-fade-in-up">
+            <p class="hidden sm:block opacity-70">Asegúrate de revisar todos tus cambios antes de subirlos a producción.</p>
+            <button type="submit" [disabled]="isSaving" class="btn btn-primary btn-lg w-full sm:w-auto px-12 shadow-md">
+                @if (isSaving) {
+                    <span class="loading loading-spinner"></span>
+                    Guardando Cambios...
+                } @else {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                    Publicar en Vivo
+                }
+            </button>
+        </div>
+    </form>
+    } @else {
+        <div class="flex justify-center items-center h-64">
+            <span class="loading loading-spinner loading-lg text-primary"></span>
+        </div>
+    }
+</div>
+
+<!-- Toast Notification -->
+@if (toastMessage) {
+    <div class="toast toast-end toast-bottom z-50 animate-fade-in-up">
+        <div class="alert alert-success bg-success text-success-content shadow-lg max-w-sm rounded-box border-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span class="font-bold whitespace-normal">{{ toastMessage }}</span>
+        </div>
+    </div>
+}
+
+<style>
+    .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>

@@ -1,0 +1,158 @@
+<!-- Subscripción principal a nuestro backend -->
+@if (settings$ | async; as settings) {
+
+<!-- Cabecera Flotante -->
+<div class="fixed top-0 left-0 right-0 p-4 z-50 flex justify-end">
+  <button (click)="goToLogin()" class="btn btn-outline btn-primary bg-base-100/30 backdrop-blur-md rounded-full shadow-lg hover:shadow-primary/50 text-white font-bold tracking-wide">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+    Iniciar Sesión
+  </button>
+</div>
+
+<!-- Sección 1: Hero Principal (Bienvenida) -->
+<div class="hero min-h-screen bg-cover bg-center bg-no-repeat max-md:bg-scroll md:bg-fixed" [style.background-image]="'url(' + settings.heroBgUrl + ')'">
+  <div class="hero-overlay bg-black/50 backdrop-blur-[1px]"></div>
+  <div class="hero-content text-neutral-content text-center">
+    <div class="max-w-md animate-fade-in-up">
+      <h1 class="mb-4 font-cursive text-7xl md:text-9xl text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] tracking-wide">
+        {{ settings.heroTitle }}
+      </h1>
+      <p class="text-xl md:text-2xl font-light tracking-widest text-primary-content opacity-90 uppercase">
+        {{ settings.heroSubtitle }}
+      </p>
+      
+      <!-- Flecha para scrollear indicativa -->
+      <div class="mt-20 flex justify-center animate-bounce opacity-70">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sección 2: Descripción -->
+<div class="hero min-h-screen bg-cover bg-center bg-no-repeat max-md:bg-scroll md:bg-fixed" [style.background-image]="'url(' + settings.aboutBgUrl + ')'">
+  <div class="hero-overlay bg-black/70 backdrop-blur-[2px]"></div>
+  <div class="hero-content text-center md:text-left text-neutral-content w-full max-w-5xl">
+    <div class="flex flex-col md:flex-row items-center gap-12">
+      <div class="flex-1 space-y-6">
+        <h2 class="text-5xl md:text-6xl font-bold text-primary mb-6">{{ settings.aboutTitle }}</h2>
+        <p class="text-lg md:text-xl leading-relaxed opacity-90 whitespace-pre-line">
+          {{ settings.aboutText1 }}
+        </p>
+        <p class="text-lg md:text-xl leading-relaxed opacity-90 whitespace-pre-line">
+          {{ settings.aboutText2 }}
+        </p>
+      </div>
+      <div class="flex-1 relative w-full h-64 md:h-96 rounded-3xl overflow-hidden shadow-2xl border-4 border-primary/30">
+        <img [src]="settings.aboutImage1" loading="lazy" class="absolute inset-0 w-full h-full object-cover" alt="Esencia del café">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Banner Call to Action: Fast Pass y Check-In -->
+<div class="bg-primary text-primary-content py-16 relative overflow-hidden">
+    <!-- El fondo del banner toma prestada la imagen de héroe como textura -->
+    <div class="absolute inset-0 opacity-10 bg-cover bg-center" [style.background-image]="'url(' + settings.heroBgUrl + ')'"></div>
+    <div class="absolute right-0 top-0 opacity-10 w-64 h-64 -translate-y-1/2 translate-x-1/4 rounded-full bg-white filter blur-3xl"></div>
+    
+    <div class="relative z-10 max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
+        <div class="flex-1 text-center md:text-left">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4">¿Ya estás en la Mesa?</h2>
+            <p class="text-lg md:text-xl opacity-90 mb-6 max-w-lg">
+                Escanea el código para registrar tu visita y únete a nuestro programa de fidelidad. ¡Al llegar a 10 visitas obtienes 30% de descuento en tu cuenta!
+            </p>
+            <div class="badge badge-lg badge-outline text-white font-bold p-4 text-base">Programa Contempla Loyalty</div>
+        </div>
+        
+        <div class="card bg-base-100 shadow-2xl p-5 border-4 border-base-200 transform hover:scale-105 transition-transform duration-300">
+            <div class="bg-white rounded-xl shadow-inner p-2">
+                <qrcode [qrdata]="qrCodeUrl" [width]="180" [errorCorrectionLevel]="'Q'"></qrcode>
+            </div>
+            <p class="text-center text-sm mt-3 font-semibold text-base-content/70">Apunta tu cámara aquí</p>
+        </div>
+    </div>
+</div>
+
+<!-- Sección 4: El Menú Público Integrado -->
+<div class="min-h-screen bg-cover bg-center bg-no-repeat max-md:bg-scroll md:bg-fixed relative" [style.background-image]="'url(' + settings.menuBgUrl + ')'">
+    <div class="absolute inset-0 bg-base-300/90 backdrop-blur-sm"></div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-20">
+        <div class="text-center mb-16">
+            <h2 class="font-cursive text-6xl md:text-7xl text-primary drop-shadow-md mb-4">Nuestro Menú</h2>
+            <div class="divider divider-primary mx-auto w-32"></div>
+            <p class="text-lg opacity-80 font-medium">Delicias que seducen tu paladar</p>
+        </div>
+
+        @if (menuGrouped$ | async; as menuGrouped) {
+            @for (category of menuGrouped | keyvalue; track category.key) {
+                <div class="mb-14 fade-in-section">
+                    <h3 class="text-3xl font-bold text-base-content mb-6 pb-2 border-b-2 border-primary inline-block">
+                        {{ category.key }}
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @for (item of category.value; track item.id) {
+                            <div class="card bg-base-100/90 backdrop-blur shadow-xl border border-base-300 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group">
+                                @if (item.imageUrl) {
+                                    <figure class="h-56 w-full overflow-hidden">
+                                        <img [src]="item.imageUrl" loading="lazy" alt="{{ item.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    </figure>
+                                }
+                                <div class="card-body p-6">
+                                    <div class="flex justify-between items-start gap-4 mb-2">
+                                        <h4 class="card-title text-xl font-bold flex-1">{{ item.name }}</h4>
+                                        <div class="badge badge-primary font-bold badge-lg shadow-sm whitespace-nowrap px-4 py-3 text-lg">${{ item.price | number:'1.2-2' }}</div>
+                                    </div>
+                                    @if (item.description) {
+                                        <p class="text-sm opacity-75 leading-relaxed">{{ item.description }}</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            } @empty {
+                <div class="text-center bg-base-100/80 backdrop-blur p-12 rounded-3xl border border-base-300 shadow-xl">
+                    <p class="text-xl opacity-70">Pronto descubrirás nuestro catálogo de productos.</p>
+                </div>
+            }
+        } @else {
+            <div class="flex justify-center items-center py-20">
+                <span class="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+        }
+    </div>
+</div>
+
+} @else {
+  <!-- Fallback Skeleton mientras carga el objeto desde Firestore -->
+  <div class="min-h-screen bg-base-200 flex flex-col justify-center items-center">
+    <span class="loading loading-spinner text-primary w-16 mb-4"></span>
+    <h2 class="text-xl font-bold text-primary animate-pulse">Despertando Contempla...</h2>
+  </div>
+}
+
+<style>
+    .animate-fade-in-up {
+        animation: fadeInUp 1s ease-out forwards;
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Opcional: fade in scroll */
+    .fade-in-section {
+        animation: fadeIn 0.8s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>

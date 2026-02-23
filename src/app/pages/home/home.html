@@ -1,0 +1,94 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header/Greeting -->
+    <div class="flex items-center justify-between mb-10 animate-fade-in-up">
+        <div>
+            <h1 class="text-4xl font-bold text-white mb-2">Bienvenido a Contempla</h1>
+            <p class="text-lg text-gray-400">Panel de administración de visitas</p>
+        </div>
+    </div>
+
+    <!-- Stats Dashboard Section -->
+    <div class="columns-1 md:columns-2 lg:columns-3 gap-8 mb-12 space-y-8">
+        <!-- Se removieron Punto de Acceso y Menú Digital -->
+
+        <!-- Card: Clientes Registrados Preview -->
+        <div class="break-inside-avoid bg-bkg-panel rounded-2xl shadow-lg border border-bkg-card p-6 flex flex-col overflow-hidden h-[450px]">
+            <div class="flex items-center justify-between mb-4 border-b border-bkg-card pb-4">
+                <h3 class="text-lg font-bold text-gray-200 flex items-center gap-2">
+                    <span class="text-xl">⭐️</span> Clientes Recientes
+                </h3>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto pr-2 custom-scrollbar">
+                <div class="flex flex-col gap-3">
+                    @for (client of clients$ | async; track client.id) {
+                        <div class="flex justify-between items-center bg-bkg-card p-3 rounded-lg border border-brd-main hover:border-primary-500 transition-colors">
+                            <span class="text-sm font-medium text-gray-300 truncate w-3/4" title="{{client.email}}">{{ client.name || client.email }}</span>
+                            <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-primary-500 rounded-full shadow-sm">{{ client.visits }} {{(client.visits === 1) ? 'visita' : 'visitas'}}</span>
+                        </div>
+                    } @empty {
+                        <div class="text-center text-sm text-gray-500 italic py-6">
+                            No hay clientes registrados en el sistema.
+                        </div>
+                    }
+                </div>
+            </div>
+            
+            <a routerLink="/clientes" class="mt-4 w-full text-center px-4 py-3 bg-bkg-card hover:bg-[#3f3f4e] border border-brd-main text-gray-300 hover:text-white font-semibold rounded-xl transition-colors text-sm">
+                Ver Directorio Completo
+            </a>
+        </div>
+        
+        <!-- Se removieron Gestión de Menú y Editor de Landing Page -->
+
+
+        <!-- Card: Gráfico de Visitas -->
+        <div class="break-inside-avoid bg-bkg-panel rounded-2xl shadow-lg border border-bkg-card p-6 flex flex-col h-[450px]">
+            <div class="flex items-center justify-between mb-4 border-b border-bkg-card pb-4">
+                <h3 class="text-lg font-bold text-gray-200 flex items-center gap-2">
+                    <span class="text-xl">📊</span> Top 5 Clientes Frecuentes
+                </h3>
+            </div>
+            
+            <div class="flex-grow w-full relative">
+                <canvas baseChart
+                    [data]="barChartData"
+                    [options]="barChartOptions"
+                    [type]="barChartType">
+                </canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Content / Inspiration Section -->
+    <div class="bg-gradient-to-r from-primary-700/20 to-primary-500/10 border border-primary-500/20 rounded-3xl p-10 text-white shadow-lg relative overflow-hidden backdrop-blur-sm">
+        <div class="absolute -right-20 -top-20 opacity-5 pointer-events-none text-primary-500">
+            <svg width="400" height="400" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0z" />
+            </svg>
+        </div>
+        
+        <h2 class="text-3xl font-cursive font-bold mb-4 text-primary-500 drop-shadow-md">La magia de los atardeceres.</h2>
+        <p class="text-gray-300 text-lg max-w-2xl leading-relaxed">
+            Hemos construido este espacio con amor y dedicación. Monitorea a tus clientes de manera efectiva mientras disfrutas de una agradable taza de café. Siente la calidez en cada línea de código.
+        </p>
+    </div>
+</div>
+
+<style>
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
