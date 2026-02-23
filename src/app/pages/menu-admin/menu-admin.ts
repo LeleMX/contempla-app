@@ -19,7 +19,6 @@ export class MenuAdmin implements OnInit {
   currentItem: MenuItem = this.getEmptyItem();
   isEditing = false;
   isSaving = false;
-  selectedFile: File | null = null;
   
   categories = ['Bebidas Calientes', 'Bebidas Frías', 'Postres', 'Snacks', 'Especialidades'];
 
@@ -39,15 +38,9 @@ export class MenuAdmin implements OnInit {
   cancelEdit() {
     this.currentItem = this.getEmptyItem();
     this.isEditing = false;
-    this.selectedFile = null;
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
-    }
-  }
+
 
   // Modal State
   showConfirmModal = false;
@@ -89,10 +82,7 @@ export class MenuAdmin implements OnInit {
     this.isSaving = true;
     this.cdr.detectChanges();
     try {
-      if (this.selectedFile) {
-        this.currentItem.imageUrl = await this.menuService.uploadImage(this.selectedFile);
-        this.selectedFile = null; // Limpiar después de subir
-      }
+
       
       // Limpiar propiedades vacías para evitar errores de Firestore
       const docPayload = { ...this.currentItem };

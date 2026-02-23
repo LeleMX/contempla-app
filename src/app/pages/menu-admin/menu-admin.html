@@ -57,13 +57,14 @@
                     
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text font-bold">Subir Imagen Fotográfica (Opcional)</span>
+                            <span class="label-text font-bold">Enlace Fotográfico de Internet (Opcional)</span>
                         </div>
-                        <input type="file" (change)="onFileSelected($event)" accept="image/*"
-                               class="file-input file-input-bordered w-full focus:file-input-primary" />
-                        @if (currentItem.imageUrl && !selectedFile) {
+                        <input type="url" id="imageUrl" [(ngModel)]="currentItem.imageUrl" name="imageUrl"
+                               class="input input-bordered w-full focus:input-primary"
+                               placeholder="Ej. https://images.unsplash.com/...jpg">
+                        @if (currentItem.imageUrl) {
                             <div class="mt-2">
-                                <span class="text-xs opacity-70 mb-1 block">Imagen Actual:</span>
+                                <span class="text-xs opacity-70 mb-1 block">Vista Previa:</span>
                                 <div class="avatar">
                                     <div class="w-20 rounded-md border border-base-300 shadow-sm">
                                         <img [src]="currentItem.imageUrl" loading="lazy" (error)="currentItem.imageUrl=''" alt="Preview">
