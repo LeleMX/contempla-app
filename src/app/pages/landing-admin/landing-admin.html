@@ -1,8 +1,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="flex items-center justify-between mb-8 animate-fade-in-up">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4 animate-fade-in-up">
         <div>
-            <h1 class="text-4xl font-bold mb-2">Editor de Landing Page</h1>
-            <p class="text-lg opacity-70">Personaliza los textos e imágenes de tu página principal en tiempo real</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Editor de Landing Page</h1>
+            <p class="text-base md:text-lg opacity-70">Personaliza los textos e imágenes de tu página principal en tiempo real</p>
         </div>
     </div>
 
@@ -15,31 +15,76 @@
                 <h2 class="card-title text-2xl border-b border-base-300 pb-4 mb-4">1. Bienvenida (Hero)</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <label class="form-control w-full">
-                        <div class="label"><span class="label-text font-bold text-lg">Título Principal</span></div>
-                        <input type="text" [(ngModel)]="settings.heroTitle" name="heroTitle" required
-                               class="input input-bordered w-full focus:input-primary font-cursive text-2xl" placeholder="Ej. Contempla">
-                    </label>
+                    <div class="flex flex-col gap-2 w-full">
+                        <label class="form-control w-full">
+                            <div class="label"><span class="label-text font-bold text-lg">Título Principal</span></div>
+                            <input type="text" [(ngModel)]="settings.heroTitle" name="heroTitle" required
+                                   class="input input-bordered w-full focus:input-primary font-cursive text-2xl" placeholder="Ej. Contempla">
+                        </label>
+                        <div class="flex flex-col sm:flex-row gap-6 mt-4">
+                            <div class="flex flex-col justify-center gap-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <span class="text-sm font-bold opacity-70">Color</span>
+                                    <input type="color" [(ngModel)]="settings.heroTitleColor" name="heroTitleColor" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                                </label>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-center">
+                                <span class="text-xs font-bold opacity-70 mb-2">Tamaño del Texto</span>
+                                <input type="range" min="0" max="6" [value]="getSizeIndex(settings.heroTitleSize)" (input)="setSizeFromIndex($event, 'heroTitleSize')" class="range range-xs range-primary" step="1" />
+                                <div class="w-full flex justify-between text-[10px] px-1 mt-1 opacity-50 font-bold">
+                                    <span>XS</span><span>SM</span><span>MD</span><span>LG</span><span>XL</span><span>2X</span><span>3X</span>
+                                </div>
+                            </div>
+                            <div class="w-24 h-16 border border-base-300 rounded-xl bg-base-200 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
+                                <span [ngClass]="settings.heroTitleSize" [style.color]="settings.heroTitleColor" class="font-cursive leading-none">Aa</span>
+                            </div>
+                        </div>
+                    </div>
 
-                    <label class="form-control w-full">
-                        <div class="label"><span class="label-text font-bold text-lg">Subtítulo Corto</span></div>
-                        <input type="text" [(ngModel)]="settings.heroSubtitle" name="heroSubtitle" required
-                               class="input input-bordered w-full focus:input-primary" placeholder="Ej. El Arte del Café">
-                    </label>
+                    <div class="flex flex-col gap-2 w-full">
+                        <label class="form-control w-full">
+                            <div class="label"><span class="label-text font-bold text-lg">Subtítulo Corto</span></div>
+                            <input type="text" [(ngModel)]="settings.heroSubtitle" name="heroSubtitle" required
+                                   class="input input-bordered w-full focus:input-primary" placeholder="Ej. El Arte del Café">
+                        </label>
+                        <div class="flex flex-col sm:flex-row gap-6 mt-4">
+                            <div class="flex flex-col justify-center gap-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <span class="text-sm font-bold opacity-70">Color</span>
+                                    <input type="color" [(ngModel)]="settings.heroSubtitleColor" name="heroSubtitleColor" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                                </label>
+                            </div>
+                            <div class="flex-1 flex flex-col justify-center">
+                                <span class="text-xs font-bold opacity-70 mb-2">Tamaño del Texto</span>
+                                <input type="range" min="0" max="6" [value]="getSizeIndex(settings.heroSubtitleSize)" (input)="setSizeFromIndex($event, 'heroSubtitleSize')" class="range range-xs range-primary" step="1" />
+                                <div class="w-full flex justify-between text-[10px] px-1 mt-1 opacity-50 font-bold">
+                                    <span>XS</span><span>SM</span><span>MD</span><span>LG</span><span>XL</span><span>2X</span><span>3X</span>
+                                </div>
+                            </div>
+                            <div class="w-24 h-16 border border-base-300 rounded-xl bg-base-200 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
+                                <span [ngClass]="settings.heroSubtitleSize" [style.color]="settings.heroSubtitleColor" class="leading-none uppercase tracking-widest font-light">Aa</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <label class="form-control w-full mt-4">
                     <div class="label"><span class="label-text font-bold">Fondo de Pantalla Principal (Hero)</span></div>
                     <div class="flex flex-col md:flex-row gap-4 items-center">
-                        <div class="w-full md:w-2/3">
-                            <input type="file" (change)="onFileSelected($event, 'heroBg')" accept="image/*"
-                                class="file-input file-input-bordered w-full focus:file-input-primary" />
+                        <div class="w-full md:w-2/3 relative">
+                            <!-- Custom File Input to display Spanish text -->
+                            <input type="file" id="heroBgInput" (change)="onFileSelected($event, 'heroBg')" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                            <div class="flex items-center gap-2">
+                                <button type="button" class="btn btn-neutral pointer-events-none">Elegir Archivo</button>
+                                <span class="opacity-70 text-sm italic pointer-events-none">Ningún archivo seleccionado</span>
+                            </div>
+                            <div class="text-[11px] opacity-60 mt-2 font-medium">💡 Recomendado: 1920x1080px (Alta calidad, horizontal)</div>
                         </div>
                         <div class="w-full md:w-1/3 flex justify-center">
                             @if (settings.heroBgUrl) {
                                 <div class="avatar">
                                     <div class="w-32 rounded-lg border-2 border-primary shadow-lg">
-                                        <img [src]="settings.heroBgUrl" alt="Fondo Hero">
+                                        <img [src]="settings.heroBgUrl" alt="Fondo Hero" class="cursor-pointer hover:opacity-80 transition-opacity w-full h-full object-cover" title="Ver tamaño completo" (click)="openImagePreview(settings.heroBgUrl); $event.preventDefault(); $event.stopPropagation()">
                                     </div>
                                 </div>
                             }
@@ -54,37 +99,79 @@
             <div class="card-body">
                 <h2 class="card-title text-2xl border-b border-base-300 pb-4 mb-4">2. Nuestra Esencia</h2>
                 
-                <label class="form-control w-full mb-4">
-                    <div class="label"><span class="label-text font-bold text-lg">Encabezado de Sección</span></div>
-                    <input type="text" [(ngModel)]="settings.aboutTitle" name="aboutTitle" required
-                           class="input input-bordered w-full focus:input-primary max-w-md" placeholder="Ej. Nuestra Esencia">
-                </label>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div class="flex flex-col gap-2 w-full mb-4">
                     <label class="form-control w-full">
-                        <div class="label"><span class="label-text font-bold">Párrafo 1</span></div>
-                        <textarea [(ngModel)]="settings.aboutText1" name="aboutText1" rows="4" required
-                                  class="textarea textarea-bordered focus:textarea-primary text-base leading-relaxed"></textarea>
+                        <div class="label"><span class="label-text font-bold text-lg">Encabezado de Sección</span></div>
+                        <input type="text" [(ngModel)]="settings.aboutTitle" name="aboutTitle" required
+                               class="input input-bordered w-full focus:input-primary max-w-md" placeholder="Ej. Nuestra Esencia">
                     </label>
+                    <div class="flex flex-col sm:flex-row gap-6 mt-4">
+                        <div class="flex flex-col justify-center gap-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <span class="text-sm font-bold opacity-70">Color</span>
+                                <input type="color" [(ngModel)]="settings.aboutTitleColor" name="aboutTitleColor" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                            </label>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <span class="text-xs font-bold opacity-70 mb-2">Tamaño del Texto</span>
+                            <input type="range" min="0" max="6" [value]="getSizeIndex(settings.aboutTitleSize)" (input)="setSizeFromIndex($event, 'aboutTitleSize')" class="range range-xs range-primary" step="1" />
+                            <div class="w-full flex justify-between text-[10px] px-1 mt-1 opacity-50 font-bold">
+                                <span>XS</span><span>SM</span><span>MD</span><span>LG</span><span>XL</span><span>2X</span><span>3X</span>
+                            </div>
+                        </div>
+                        <div class="w-24 h-16 border border-base-300 rounded-xl bg-base-200 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
+                            <span [ngClass]="settings.aboutTitleSize" [style.color]="settings.aboutTitleColor" class="font-bold leading-none">Aa</span>
+                        </div>
+                    </div>
+                </div>
 
-                    <label class="form-control w-full">
-                        <div class="label"><span class="label-text font-bold">Párrafo 2</span></div>
-                        <textarea [(ngModel)]="settings.aboutText2" name="aboutText2" rows="4" required
-                                  class="textarea textarea-bordered focus:textarea-primary text-base leading-relaxed"></textarea>
-                    </label>
+                <div class="flex flex-col gap-4 mb-4">
+                    <div class="flex items-center gap-2">
+                        <label class="flex items-center gap-2 cursor-pointer mt-2">
+                            <span class="text-sm font-bold opacity-70">Color de Textos Largos</span>
+                            <input type="color" [(ngModel)]="settings.aboutTextColor" name="aboutTextColor" class="w-8 h-8 rounded cursor-pointer border-0 p-0">
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <label class="form-control w-full">
+                            <div class="label"><span class="label-text font-bold">Párrafo 1</span></div>
+                            <textarea [(ngModel)]="settings.aboutText1" name="aboutText1" rows="4" required
+                                      class="textarea textarea-bordered focus:textarea-primary text-base leading-relaxed"></textarea>
+                        </label>
+    
+                        <label class="form-control w-full">
+                            <div class="label"><span class="label-text font-bold">Párrafo 2</span></div>
+                            <textarea [(ngModel)]="settings.aboutText2" name="aboutText2" rows="4" required
+                                      class="textarea textarea-bordered focus:textarea-primary text-base leading-relaxed"></textarea>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <label class="form-control w-full border border-base-200 p-4 rounded-xl">
                         <div class="label"><span class="label-text font-bold">Imagen de Acompañamiento</span></div>
-                        <input type="file" (change)="onFileSelected($event, 'aboutImage')" accept="image/*" class="file-input file-input-bordered file-input-sm w-full mb-4" />
-                        @if (settings.aboutImage1) { <img [src]="settings.aboutImage1" class="w-full h-32 object-cover rounded-md shadow"> }
+                        <div class="relative w-full mb-4">
+                            <input type="file" (change)="onFileSelected($event, 'aboutImage')" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                            <div class="flex flex-col gap-2">
+                                <button type="button" class="btn btn-neutral btn-sm pointer-events-none">Elegir Archivo</button>
+                                <span class="opacity-70 text-xs italic pointer-events-none">Ningún archivo seleccionado</span>
+                            </div>
+                            <div class="text-[11px] opacity-60 mt-2 font-medium">💡 Recomendado: 800x800px (Cuadrada)</div>
+                        </div>
+                        @if (settings.aboutImage1) { <img [src]="settings.aboutImage1" class="w-full h-32 object-cover rounded-md shadow cursor-pointer hover:opacity-80 transition-opacity" title="Ver tamaño completo" (click)="openImagePreview(settings.aboutImage1); $event.preventDefault(); $event.stopPropagation()"> }
                     </label>
 
                     <label class="form-control w-full border border-base-200 p-4 rounded-xl">
                         <div class="label"><span class="label-text font-bold">Fondo de la Sección (Esencia)</span></div>
-                        <input type="file" (change)="onFileSelected($event, 'aboutBg')" accept="image/*" class="file-input file-input-bordered file-input-sm w-full mb-4" />
-                        @if (settings.aboutBgUrl) { <img [src]="settings.aboutBgUrl" class="w-full h-32 object-cover rounded-md shadow"> }
+                        <div class="relative w-full mb-4">
+                            <input type="file" (change)="onFileSelected($event, 'aboutBg')" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                            <div class="flex flex-col gap-2">
+                                <button type="button" class="btn btn-neutral btn-sm pointer-events-none">Elegir Archivo</button>
+                                <span class="opacity-70 text-xs italic pointer-events-none">Ningún archivo seleccionado</span>
+                            </div>
+                            <div class="text-[11px] opacity-60 mt-2 font-medium">💡 Recomendado: 1920x1080px (Patrón o textura)</div>
+                        </div>
+                        @if (settings.aboutBgUrl) { <img [src]="settings.aboutBgUrl" class="w-full h-32 object-cover rounded-md shadow cursor-pointer hover:opacity-80 transition-opacity" title="Ver tamaño completo" (click)="openImagePreview(settings.aboutBgUrl); $event.preventDefault(); $event.stopPropagation()"> }
                     </label>
                 </div>
             </div>
@@ -98,22 +185,26 @@
                 <p class="opacity-80 mb-4">Esta es la imagen de fondo que aparece detrás de la lista de tus bebidas y platillos en la parte final de la Landing Page.</p>
                 <label class="form-control w-full max-w-lg">
                     <div class="label"><span class="label-text font-bold">Imagen de Fondo para Menú</span></div>
-                    <input type="file" (change)="onFileSelected($event, 'menuBg')" accept="image/*" class="file-input file-input-bordered w-full mb-4" />
-                    @if (settings.menuBgUrl) { <img [src]="settings.menuBgUrl" class="w-full h-40 object-cover rounded-xl shadow border-2 border-base-200"> }
+                    <div class="relative w-full mb-4 mt-2">
+                        <input type="file" (change)="onFileSelected($event, 'menuBg')" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        <div class="flex items-center gap-2">
+                            <button type="button" class="btn btn-neutral btn-sm pointer-events-none">Elegir Archivo</button>
+                            <span class="opacity-70 text-sm italic pointer-events-none">Ningún archivo seleccionado</span>
+                        </div>
+                        <div class="text-[11px] opacity-60 mt-2 font-medium">💡 Recomendado: 1920x1080px (Fondo horizontal)</div>
+                    </div>
+                    @if (settings.menuBgUrl) { <img [src]="settings.menuBgUrl" class="w-full h-40 object-cover rounded-xl shadow border-2 border-base-200 cursor-pointer hover:opacity-80 transition-opacity" title="Ver tamaño completo" (click)="openImagePreview(settings.menuBgUrl); $event.preventDefault(); $event.stopPropagation()"> }
                 </label>
             </div>
         </div>
 
-        <!-- Sticky Footer de Guardado -->
-        <div class="sticky bottom-4 z-40 bg-base-200 p-4 rounded-2xl shadow-2xl border-t-4 border-primary mt-8 flex justify-between items-center animate-fade-in-up">
-            <p class="hidden sm:block opacity-70">Asegúrate de revisar todos tus cambios antes de subirlos a producción.</p>
-            <button type="submit" [disabled]="isSaving" class="btn btn-primary btn-lg w-full sm:w-auto px-12 shadow-md">
+        <!-- Botón de Guardado Flotante (Scrolling) -->
+        <div class="fixed bottom-6 right-6 z-50 animate-fade-in-up">
+            <button type="submit" [disabled]="isSaving" class="btn btn-primary btn-circle btn-lg h-16 w-16 md:h-20 md:w-20 shadow-2xl hover:scale-105 transition-transform border-4 border-base-100" title="Guardar Cambios">
                 @if (isSaving) {
-                    <span class="loading loading-spinner"></span>
-                    Guardando Cambios...
+                    <span class="loading loading-spinner loading-lg"></span>
                 } @else {
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                    Publicar en Vivo
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                 }
             </button>
         </div>
@@ -125,6 +216,21 @@
     }
 </div>
 
+<!-- Image Preview Modal / Lightbox -->
+<dialog class="modal z-[100]" [class.modal-open]="showImagePreview">
+    <div class="modal-box bg-transparent shadow-none p-0 overflow-visible max-w-4xl relative flex justify-center items-center h-full">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 lg:-right-12 lg:top-0 text-white bg-black/60 hover:bg-black/90 z-50 text-xl" 
+                (click)="closeImagePreview()">✕</button>
+        @if (previewImageUrl) {
+            <img [src]="previewImageUrl" class="object-contain max-h-[85vh] w-auto max-w-full rounded-2xl shadow-2xl scale-100 animate-zoom-in" alt="Vista Previa">
+        }
+    </div>
+    <!-- Clickeo afuera cierra el modal -->
+    <form method="dialog" class="modal-backdrop bg-black/80 backdrop-blur-sm" (click)="closeImagePreview()">
+        <button>cerrar</button>
+    </form>
+</dialog>
+
 <!-- Toast Notification -->
 @if (toastMessage) {
     <div class="toast toast-end toast-bottom z-50 animate-fade-in-up">
@@ -135,7 +241,4 @@
     </div>
 }
 
-<style>
-    .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+

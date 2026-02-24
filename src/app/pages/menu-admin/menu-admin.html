@@ -57,17 +57,22 @@
                     
                     <label class="form-control w-full">
                         <div class="label">
-                            <span class="label-text font-bold">Enlace Fotográfico de Internet (Opcional)</span>
+                            <span class="label-text font-bold">Imagen del Producto (Opcional)</span>
                         </div>
-                        <input type="url" id="imageUrl" [(ngModel)]="currentItem.imageUrl" name="imageUrl"
-                               class="input input-bordered w-full focus:input-primary"
-                               placeholder="Ej. https://images.unsplash.com/...jpg">
-                        @if (currentItem.imageUrl) {
+                        <div class="relative w-full">
+                            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                            <div class="flex items-center gap-2">
+                                <button type="button" class="btn btn-neutral pointer-events-none">Elegir Archivo</button>
+                                <span class="opacity-70 text-sm italic pointer-events-none">Ningún archivo seleccionado</span>
+                            </div>
+                            <div class="text-[11px] opacity-60 mt-2 font-medium">💡 Recomendado: 800x800px (Foto cuadrada del producto)</div>
+                        </div>
+                        @if (imagePreviewUrl) {
                             <div class="mt-2">
                                 <span class="text-xs opacity-70 mb-1 block">Vista Previa:</span>
                                 <div class="avatar">
-                                    <div class="w-20 rounded-md border border-base-300 shadow-sm">
-                                        <img [src]="currentItem.imageUrl" loading="lazy" (error)="currentItem.imageUrl=''" alt="Preview">
+                                    <div class="w-32 rounded-md border border-base-300 shadow-sm">
+                                        <img [src]="imagePreviewUrl" loading="lazy" alt="Preview">
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +123,7 @@
                                         <div class="avatar">
                                             <div class="mask mask-squircle w-12 h-12 flex items-center justify-center bg-base-200 border border-base-300">
                                                 @if (item.imageUrl) {
-                                                    <img [src]="item.imageUrl" loading="lazy" alt="{{item.name}}">
+                                                    <img [src]="item.imageUrl" loading="lazy" alt="{{item.name}}" class="cursor-pointer hover:opacity-80 transition-opacity" title="Ver tamaño completo" (click)="openImagePreview(item.imageUrl)">
                                                 } @else {
                                                     <svg class="w-6 h-6 opacity-50 m-auto mt-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                                 }
@@ -168,6 +173,21 @@
     </div>
 }
 
+<!-- Image Preview Modal / Lightbox -->
+<dialog class="modal" [class.modal-open]="showImagePreview">
+    <div class="modal-box bg-transparent shadow-none p-0 overflow-visible max-w-4xl relative flex justify-center items-center h-full">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 lg:-right-12 lg:top-0 text-white bg-black/60 hover:bg-black/90 z-50 text-xl" 
+                (click)="closeImagePreview()">✕</button>
+        @if (previewImageUrl) {
+            <img [src]="previewImageUrl" class="object-contain max-h-[85vh] w-auto max-w-full rounded-2xl shadow-2xl scale-100 animate-zoom-in" alt="Vista Previa">
+        }
+    </div>
+    <!-- Clickeo afuera cierra el modal -->
+    <form method="dialog" class="modal-backdrop bg-black/80 backdrop-blur-sm" (click)="closeImagePreview()">
+        <button>cerrar</button>
+    </form>
+</dialog>
+
 <!-- Confirmation Modal -->
 @if (showConfirmModal) {
     <div class="modal modal-open animate-fade-in backdrop-blur-sm">
@@ -188,11 +208,4 @@
     </div>
 }
 
-<style>
-    .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
-    .animate-scale-in { animation: scaleIn 0.2s ease-out forwards; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    .animate-fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-</style>
+

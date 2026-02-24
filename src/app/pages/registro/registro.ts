@@ -16,13 +16,13 @@ export class Registro {
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   
-  name = '';
   email = '';
   isLoading = false;
   successMessage = '';
   errorMessage = '';
   isAdmin = false;
   isRewardEligible = false;
+  visitCount = 0;
 
   private isValidEmail(email: string): boolean {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,8 +30,8 @@ export class Registro {
   }
 
   async onSubmit() {
-    if (!this.name || !this.email) {
-      this.errorMessage = 'Ambos campos son requeridos.';
+    if (!this.email) {
+      this.errorMessage = 'El correo electrónico es requerido.';
       return;
     }
     
@@ -46,16 +46,16 @@ export class Registro {
     this.cdr.detectChanges();
     
     try {
-      const newVisitCount = await this.clientService.registerVisit(this.name, this.email);
+      const newVisitCount = await this.clientService.registerVisit(this.email);
+      this.visitCount = newVisitCount;
       
       if (newVisitCount === 10) {
         this.isRewardEligible = true;
         this.successMessage = '¡Felicidades! Has alcanzado 10 visitas.';
       } else {
-        this.successMessage = `Agradecemos tu visita a nuestra cafetería, ${this.name.split(' ')[0]}. ¡Vuelve pronto!`;
+        this.successMessage = 'Registro exitoso';
       }
       
-      this.name = '';
       this.email = '';
       this.isAdmin = this.authService.isAuthenticated;
 

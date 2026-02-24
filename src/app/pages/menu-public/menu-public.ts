@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AsyncPipe, DecimalPipe, KeyValuePipe } from '@angular/common';
 import { MenuService, MenuItem } from '../../core/services/menu';
 import { Observable, map } from 'rxjs';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
   selector: 'app-menu-public',
   standalone: true,
-  imports: [AsyncPipe, DecimalPipe, KeyValuePipe],
+  imports: [AsyncPipe, DecimalPipe, KeyValuePipe, Footer],
   templateUrl: './menu-public.html'
 })
 export class MenuPublic implements OnInit {

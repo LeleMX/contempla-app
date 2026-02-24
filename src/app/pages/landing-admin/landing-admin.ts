@@ -2,6 +2,7 @@ import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angula
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SettingsService, LandingSettings } from '../../core/services/settings.service';
+import { AuditService } from '../../core/services/audit.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -12,18 +13,48 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class LandingAdmin implements OnInit, OnDestroy {
   private settingsService = inject(SettingsService);
+  private auditService = inject(AuditService);
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
 
   settings: LandingSettings | null = null;
+  initialSettings: LandingSettings | null = null;
   isSaving = false;
   toastMessage: string | null = null;
+
+  sizeOptions = ['text-sm', 'text-base', 'text-xl', 'text-3xl', 'text-5xl', 'text-7xl', 'text-9xl'];
+
+  getSizeIndex(size: string): number {
+    const index = this.sizeOptions.indexOf(size);
+    return index >= 0 ? index : 4;
+  }
+
+  setSizeFromIndex(event: any, field: 'heroTitleSize' | 'heroSubtitleSize' | 'aboutTitleSize'): void {
+    if (this.settings) {
+      this.settings[field] = this.sizeOptions[Number(event.target.value)];
+    }
+  }
 
   // File tracking for image uploads
   selectedHeroBg: File | null = null;
   selectedAboutBg: File | null = null;
   selectedAboutImage: File | null = null;
   selectedMenuBg: File | null = null;
+
+  // Image Preview Modal State
+  showImagePreview = false;
+  previewImageUrl: string | null = null;
+
+  openImagePreview(url: string | undefined) {
+    if (!url) return;
+    this.previewImageUrl = url;
+    this.showImagePreview = true;
+  }
+
+  closeImagePreview() {
+    this.showImagePreview = false;
+    this.previewImageUrl = null;
+  }
 
   ngOnInit() {
     this.settingsService.getLandingSettings()
@@ -32,6 +63,9 @@ export class LandingAdmin implements OnInit, OnDestroy {
         next: (data) => {
           // Clone the object to avoid mutating the observable source directly during edits
           this.settings = { ...data };
+          if (!this.initialSettings) {
+             this.initialSettings = { ...data }; // Guardamos estado inicial para la bitácora
+          }
           this.cdr.detectChanges(); // Trigger Angular Zone change detection
         },
         error: (err) => console.error('Error fetching settings', err)
@@ -46,6 +80,17 @@ export class LandingAdmin implements OnInit, OnDestroy {
   onFileSelected(event: any, type: 'heroBg' | 'aboutBg' | 'aboutImage' | 'menuBg') {
     const file = event.target.files[0];
     if (!file) return;
+
+    // Security Validation
+    if (!file.type.startsWith('image/')) {
+      this.showToast('Error: El archivo debe ser una imagen válida');
+      return;
+    }
+    const allowedExtensions = /\.(jpg|jpeg|png|webp|gif)$/i;
+    if (!allowedExtensions.test(file.name)) {
+      this.showToast('Error: Formato de imagen no permitido (.jpg, .png, .webp)');
+      return;
+    }
 
     switch (type) {
       case 'heroBg': this.selectedHeroBg = file; break;
@@ -81,6 +126,11 @@ export class LandingAdmin implements OnInit, OnDestroy {
 
       // 2. Save settings to Firestore
       await this.settingsService.updateLandingSettings(this.settings);
+      
+      // 3. Registrar Audit Log
+      await this.auditService.logAction('ACTUALIZAR_LANDING', 'Landing', this.settings, this.initialSettings);
+      this.initialSettings = { ...this.settings };
+      
       this.showToast('Configuración guardada exitosamente');
 
     } catch (e) {

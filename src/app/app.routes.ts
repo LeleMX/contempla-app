@@ -13,7 +13,8 @@ export const routes: Routes = [
       { path: 'home', loadComponent: () => import('./pages/home/home').then(m => m.Home) },
       { path: 'clientes', loadComponent: () => import('./pages/clients/clients').then(m => m.Clients) },
       { path: 'menu-admin', loadComponent: () => import('./pages/menu-admin/menu-admin').then(m => m.MenuAdmin) },
-      { path: 'landing-admin', loadComponent: () => import('./pages/landing-admin/landing-admin').then(m => m.LandingAdmin) }
+      { path: 'landing-admin', loadComponent: () => import('./pages/landing-admin/landing-admin').then(m => m.LandingAdmin) },
+      { path: 'bitacora', loadComponent: () => import('./pages/bitacora/bitacora').then(m => m.Bitacora) }
     ]
   },
   { path: 'registro', loadComponent: () => import('./pages/registro/registro').then(m => m.Registro) },

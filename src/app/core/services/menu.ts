@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Firestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from '@angular/fire/firestore';
-import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { StorageService } from './storage.service';
 import { Observable } from 'rxjs';
 
 export interface MenuItem {
@@ -17,7 +17,7 @@ export interface MenuItem {
 })
 export class MenuService {
   private firestore = inject(Firestore);
-  private storage = inject(Storage);
+  private storageService = inject(StorageService);
 
   getMenuItems(): Observable<MenuItem[]> {
     return new Observable<MenuItem[]>((observer) => {
@@ -46,14 +46,7 @@ export class MenuService {
   }
 
   async uploadImage(file: File): Promise<string> {
-    const timestamp = new Date().getTime();
-    const storageRef = ref(this.storage, `menu-images/${timestamp}_${file.name}`);
-    
-    // Subir archivo a Storage
-    const snapshot = await uploadBytes(storageRef, file);
-    // Obtener la URL pública de descarga
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    return downloadURL;
+    return this.storageService.uploadFile(file, 'menu-images');
   }
 
   addMenuItem(item: MenuItem): Promise<any> {

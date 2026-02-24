@@ -1,129 +1,116 @@
-<div class="min-h-screen bg-base-200 flex flex-col justify-center items-center p-4">
-  <div class="card w-full max-w-md bg-base-100 shadow-2xl border border-base-300 overflow-hidden">
-    <div class="bg-primary p-6 text-center text-primary-content">
+<div class="min-h-screen bg-gradient-to-br from-base-200 to-base-300 flex items-center justify-center p-4 md:p-8">
+  
+  <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center my-auto"
+       [class.md:grid-cols-2]="successMessage"
+       [class.md:max-w-md]="!successMessage">
+    
+    <!-- Formulario Principal -->
+    <div class="card w-full bg-base-100 shadow-2xl border border-base-300 overflow-hidden h-full flex flex-col justify-between"
+         [class.md:col-span-1]="successMessage"
+         [class.md:col-span-full]="!successMessage">
+    <div class="bg-primary p-8 text-center text-primary-content">
       <h1 class="font-cursive text-5xl mb-2 drop-shadow-sm">Contempla</h1>
       <p class="font-medium opacity-90">Registra tu visita de hoy</p>
     </div>
     
     <div class="card-body p-8">
-      @if (successMessage) {
-        @if (isRewardEligible) {
-            <div class="alert alert-success bg-success/20 border-success text-success-content flex-col gap-4 animate-scale-in">
-              <div class="text-6xl animate-bounce">🎁</div>
-              <h2 class="text-2xl font-bold">¡Felicidades!</h2>
-              <p class="text-center">
-                Has alcanzado tu <strong>10ma visita</strong>. ¡Te has ganado un <span class="font-bold text-xl">30% de descuento</span> en tu próxima compra!
-              </p>
-              <div class="bg-base-100/50 rounded-xl py-3 px-4 font-mono text-2xl tracking-widest font-bold mx-auto shadow-inner text-base-content">
-                CONTEMPLA30
-              </div>
-              <p class="text-sm opacity-70">Muestra esta pantalla en caja para validar tu descuento.</p>
-              
-              @if (isAdmin) {
-                <p class="text-sm mt-2 opacity-50">Redirigiendo a inicio...</p>
-              } @else {
-                <p class="text-sm mt-2 font-bold">Puedes cerrar esta ventana.</p>
-              }
-            </div>
-        } @else {
-            <div role="alert" class="alert alert-success animate-fade-in-up">
-              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <div>
-                <h3 class="font-bold">{{ successMessage }}</h3>
-                @if (isAdmin) {
-                  <div class="text-xs opacity-70">Redirigiendo a inicio...</div>
-                } @else {
-                  <div class="text-xs">Puedes cerrar esta ventana.</div>
-                }
-              </div>
-            </div>
-        }
-      } @else {
-        <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4" novalidate>
-          <label class="form-control w-full">
-            <div class="label">
-              <span class="label-text font-bold">Nombre Completo</span>
-            </div>
-            <input 
-              type="text" 
-              id="name" 
-              name="name"
-              [(ngModel)]="name"
-              placeholder="Juan Pérez"
-              required
-              class="input input-bordered w-full focus:input-primary"
-            />
-          </label>
-
-          <label class="form-control w-full mt-2">
-            <div class="label">
-              <span class="label-text font-bold">Correo Electrónico</span>
-            </div>
-            <input 
-              type="email" 
-              id="email" 
-              name="email"
-              [(ngModel)]="email"
-              placeholder="tu@correo.com"
-              required
-              class="input input-bordered w-full focus:input-primary"
-            />
-          </label>
-
-          @if (errorMessage) {
-            <div role="alert" class="alert alert-error animate-fade-in-up">
-              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span>{{ errorMessage }}</span>
-            </div>
-          }
-
-          <div class="form-control mt-4">
-            <button 
-              type="submit" 
-              [disabled]="isLoading || !email"
-              class="btn btn-primary btn-lg w-full">
-              @if (isLoading) {
-                <span class="loading loading-spinner"></span>
-                Registrando...
-              } @else {
-                Hacer Check-in
-              }
-            </button>
+      <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4" novalidate>
+        <label class="form-control w-full">
+          <div class="label">
+            <span class="label-text font-bold text-lg">Correo Electrónico</span>
           </div>
-        </form>
-      }
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            [(ngModel)]="email"
+            placeholder="tu.correo@ejemplo.com"
+            required
+            class="input input-bordered w-full focus:input-primary input-lg text-lg"
+          />
+        </label>
+
+        @if (errorMessage) {
+          <div role="alert" class="alert alert-error animate-fade-in-up">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>{{ errorMessage }}</span>
+          </div>
+        }
+
+        <div class="form-control mt-4">
+          <button 
+            type="submit" 
+            [disabled]="isLoading || !email"
+            class="btn btn-primary btn-lg w-full text-lg shadow-md">
+            @if (isLoading) {
+              <span class="loading loading-spinner"></span>
+              Registrando...
+            } @else {
+              Hacer Check-in
+            }
+          </button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
-<style>
-    .animate-scale-in {
-        animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-    
-    @keyframes scaleIn {
-        from {
-            opacity: 0;
-            transform: scale(0.8);
+  <!-- Tarjeta de Éxito (Lado a lado en Desktop, Debajo en Móvil) -->
+  @if (successMessage) {
+    <div class="card w-full bg-base-100 shadow-2xl border-t-8 border-t-success animate-scale-in h-full flex flex-col justify-center relative overflow-hidden transition-all duration-500">
+      <!-- Decoración sutil de fondo -->
+      <div class="absolute -right-10 -top-10 opacity-5 pointer-events-none scale-150">
+        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      </div>
+      <div class="card-body items-center text-center p-8 lg:p-10 z-10">
+        
+        @if (isRewardEligible) {
+          <!-- Recompensa 10 Visitas -->
+          <div class="text-6xl animate-bounce mb-2">🎁</div>
+          <h2 class="card-title text-3xl font-bold text-success mb-2">¡Felicidades!</h2>
+          <p class="text-base-content/80 text-lg mb-4">
+            Has alcanzado tu <strong>10ma visita</strong>. ¡Te has ganado un <span class="font-bold text-success">30% de descuento</span> en tu próxima compra!
+          </p>
+          <div class="bg-base-200 border border-base-300 rounded-xl py-4 w-full shadow-inner mb-4">
+             <span class="font-mono text-3xl tracking-widest font-black text-primary">CONTEMPLA30</span>
+          </div>
+          <p class="text-sm text-base-content/60">Muestra esta pantalla en caja para validar tu descuento.</p>
+          
+        } @else {
+          <!-- Visita Normal -->
+          <div class="text-6xl animate-bounce mb-2">☕</div>
+          <h2 class="card-title text-2xl font-bold text-success">¡Gracias por tu visita!</h2>
+          <p class="text-lg text-base-content/80 mt-2">
+            Llevas acumuladas <span class="badge badge-primary badge-lg text-xl font-bold p-4 mx-1">{{ visitCount }}</span> visitas.
+          </p>
+          
+          <div class="w-full mt-6">
+            <div class="flex justify-between text-xs font-bold text-base-content/50 mb-1 px-1">
+              <span>Progreso a Recompensa</span>
+              <span>{{ visitCount % 10 }}/10</span>
+            </div>
+            <div class="w-full bg-base-200 rounded-full h-4 overflow-hidden shadow-inner">
+              <div class="bg-success h-4 transition-all duration-1000 ease-out rounded-full" [style.width]="((visitCount % 10) === 0 ? 100 : (visitCount % 10) * 10) + '%'"></div>
+            </div>
+            <p class="text-sm font-medium mt-3 text-base-content/70">
+              @if (visitCount % 10 === 0) {
+                ¡Recompensa desbloqueada en tu próxima visita!
+              } @else {
+                Faltan {{ 10 - (visitCount % 10) }} visitas más para obtener tu descuento.
+              }
+            </p>
+          </div>
         }
-        to {
-            opacity: 1;
-            transform: scale(1);
+
+        <div class="divider mt-6 mb-2"></div>
+        
+        @if (isAdmin) {
+          <p class="text-sm text-base-content/40 mt-4">Redirigiendo automáticamente...</p>
+        } @else {
+          <p class="text-sm font-bold text-success/80 mt-4">✔ Registro Guardado. Puedes cerrar esta ventana.</p>
         }
-    }
-    
-    .animate-fade-in-up {
-        animation: fadeInUp 0.4s ease-out forwards;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-</style>
+
+      </div>
+    </div>
+  }
+  </div>
+</div>

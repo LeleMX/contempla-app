@@ -11,3 +11,28 @@
 .font-cursive {
   font-family: 'Dancing Script', cursive;
 }
+/* Fix for iOS Safari background-attachment: fixed bug */
+.bg-parallax {
+  background-attachment: fixed;
+}
+
+@supports (-webkit-touch-callout: none) {
+
+  /* iOS Safari specifically */
+  .bg-parallax {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Responsive constraints for Hero Text to prevent mobile overflow */
+@media (max-width: 640px) {
+  .hero-content h1.font-cursive {
+    font-size: clamp(3rem, 15vw, 4.5rem) !important;
+    line-height: 1.2 !important;
+  }
+
+  .hero-content p.tracking-widest {
+    font-size: clamp(1rem, 4vw, 1.5rem) !important;
+    line-height: 1.5 !important;
+  }
+}

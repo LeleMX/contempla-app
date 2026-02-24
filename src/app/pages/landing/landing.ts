@@ -1,15 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AsyncPipe, DecimalPipe, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, KeyValuePipe, CommonModule } from '@angular/common';
 import { MenuService, MenuItem } from '../../core/services/menu';
 import { Observable, map } from 'rxjs';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { SettingsService, LandingSettings } from '../../core/services/settings.service';
+import { Footer } from '../../components/footer/footer';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [AsyncPipe, DecimalPipe, KeyValuePipe, QRCodeComponent],
+  imports: [AsyncPipe, DecimalPipe, KeyValuePipe, QRCodeComponent, CommonModule, Footer],
   templateUrl: './landing.html',
   styleUrl: './landing.css',
 })
@@ -46,7 +47,10 @@ export class Landing implements OnInit {
     );
   }
 
-  goToLogin() {
-    this.router.navigate(['/login']);
+  scrollToAbout() {
+    const el = document.getElementById('about-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

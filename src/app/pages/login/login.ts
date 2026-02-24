@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
@@ -12,6 +12,7 @@ import { AuthService } from '../../core/services/auth';
 export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   username = '';
   password = '';
@@ -21,15 +22,17 @@ export class Login {
   async onSubmit() {
     this.isLoading = true;
     this.errorMessage = '';
+    this.cdr.detectChanges();
 
-    const success = await this.authService.login(this.username, this.password);
+    const result = await this.authService.login(this.username, this.password);
     
-    if (success) {
+    if (result.success) {
       this.router.navigate(['/home']);
     } else {
-      this.errorMessage = 'Credenciales inválidas. Por favor intente nuevamente.';
+      this.errorMessage = result.message || 'Credenciales inválidas. Por favor intente nuevamente.';
     }
     
     this.isLoading = false;
+    this.cdr.detectChanges();
   }
 }
