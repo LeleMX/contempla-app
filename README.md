@@ -1,4 +1,18 @@
-# Contempla
+# Contempla - Plataforma Integral de Presencia Digital
+
+> **Documentación Completa**: Consulta la carpeta [`docs/`](./docs/README.md) para ver la arquitectura, guías de prueba y estándares de código.
+
+## 🚀 Resumen
+Plataforma "All-in-One" para negocios gastronómicos que incluye Landing Page, Menú Digital QR, Check-in y Panel de Administración.
+
+## 📚 Documentación
+
+*   [Índice General](./docs/README.md)
+*   [Arquitectura](./docs/ARCHITECTURE.md)
+*   [Estrategia de Pruebas](./docs/TESTING.md)
+*   [Clean Code](./docs/CLEAN_CODE.md)
+
+---
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
 

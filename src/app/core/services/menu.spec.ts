@@ -1,13 +1,34 @@
 import { TestBed } from '@angular/core/testing';
+import { MenuService } from './menu';
+import { Firestore } from '@angular/fire/firestore';
+import { StorageService } from './storage.service';
 
-import { Menu } from './menu';
-
-describe('Menu', () => {
-  let service: Menu;
+describe('MenuService', () => {
+  let service: MenuService;
+  let firestoreSpy: any;
+  let storageServiceSpy: any;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Menu);
+    firestoreSpy = {
+        collection: () => {},
+        doc: () => {},
+        addDoc: () => {},
+        updateDoc: () => {},
+        deleteDoc: () => {},
+        onSnapshot: () => {}
+    };
+    storageServiceSpy = {
+        uploadFile: () => Promise.resolve('url')
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        MenuService,
+        { provide: Firestore, useValue: firestoreSpy },
+        { provide: StorageService, useValue: storageServiceSpy }
+      ]
+    });
+    service = TestBed.inject(MenuService);
   });
 
   it('should be created', () => {
